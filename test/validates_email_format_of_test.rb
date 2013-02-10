@@ -287,6 +287,14 @@ class ValidatesEmailFormatOfTest < TEST_CASE
     ValidatesEmailFormatOf.restricted_special_chars = old_chars
   end
 
+  def test_invalid_whitespace
+    assert_invalid "\ttest@example.com"
+    assert_invalid "\rtest@example.com"
+    assert_invalid "\ntest@example.com"
+    assert_invalid "\ftest@example.com"
+    assert_invalid "\vtest@example.com"
+  end
+
   protected
     def create_person(params)
       Person.new(params)

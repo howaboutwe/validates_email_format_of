@@ -46,30 +46,32 @@ module ValidatesEmailFormatOf
                           }
       opts = options.merge(default_options) {|key, old, new| old}  # merge the default options into the specified options, retaining all specified options
 
-      return opts[:message] if email =~ /[\t\r\n\f\v]/  # space is allowed in local part if quoted
+      message = opts[:message].respond_to?(:call) ? opts[:message].call : opts[:message]
+
+      return message if email =~ /[\t\r\n\f\v]/  # space is allowed in local part if quoted
       email = email.strip if email
 
-      return opts[:message] unless (email.blank? || email.ascii_only?)
+      return message unless (email.blank? || email.ascii_only?)
 
       begin
         domain, local = email.reverse.split('@', 2)
       rescue
-        return [ opts[:message] ]
+        return [ message ]
       end
 
       # need local and domain parts
-      return [ opts[:message] ] unless local and not local.empty? and domain and not domain.empty?
+      return [ message ] unless local and not local.empty? and domain and not domain.empty?
 
       # check lengths
-      return [ opts[:message] ] unless domain.length <= opts[:domain_length] and local.length <= opts[:local_length]
+      return [ message ] unless domain.length <= opts[:domain_length] and local.length <= opts[:local_length]
 
       local.reverse!
       domain.reverse!
 
       if opts.has_key?(:with) # holdover from versions <= 1.4.7
-        return [ opts[:message] ] unless email =~ opts[:with]
+        return [ message ] unless email =~ opts[:with]
       else
-        return [ opts[:message] ] unless self.validate_local_part_syntax(local) and self.validate_domain_part_syntax(domain)
+        return [ message ] unless self.validate_local_part_syntax(local) and self.validate_domain_part_syntax(domain)
       end
 
       if opts[:check_mx] and !self.validate_email_domain(email)
@@ -78,7 +80,7 @@ module ValidatesEmailFormatOf
 
       if (self.restrict_special_chars || opts[:restrict_special_chars]) && 
           local =~ self.restricted_special_chars
-        return [ opts[:message] ]
+        return [ message ]
       end
 
       return nil    # represents no validation errors

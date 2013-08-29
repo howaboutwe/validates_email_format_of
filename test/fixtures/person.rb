@@ -37,4 +37,19 @@ if ActiveRecord::VERSION::MAJOR >= 3
                       :length => { :maximum => 1 }
 
   end
+
+  class CallableMessage < ActiveRecord::Base
+    self.table_name = 'people'
+
+    validates :email,
+      :email_format => {
+        :message => Proc.new { "fails with callable message" }
+    }
+  end
+else
+  class CallableMessage < ActiveRecord::Base
+    self.table_name = 'people'
+    validates_email_format_of :email,
+      :message => Proc.new { "fails with callable message" }
+  end
 end

@@ -216,6 +216,13 @@ class ValidatesEmailFormatOfTest < TEST_CASE
     end
   end
 
+  def test_callable_message
+    s = CallableMessage.new(:email => 'invalid')
+    assert !s.save
+    assert_equal 1, s.errors[:email].size
+    assert_equal "fails with callable message", s.errors[:email].first
+  end
+
   def test_frozen_string
     assert_valid("  #{@valid_email}  ".freeze)
     assert_invalid("  #{@invalid_email}  ".freeze)

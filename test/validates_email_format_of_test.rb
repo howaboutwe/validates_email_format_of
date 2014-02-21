@@ -132,6 +132,7 @@ class ValidatesEmailFormatOfTest < TEST_CASE
 
   def test_should_not_allow_spaces
     assert_invalid(" foo@example.com ")
+    assert_invalid("Fred\ Bloggs@example.com")
   end
 
   def test_should_required_balanced_quoted_characters

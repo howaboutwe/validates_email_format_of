@@ -48,7 +48,7 @@ module ValidatesEmailFormatOf
 
       message = opts[:message].respond_to?(:call) ? opts[:message].call : opts[:message]
 
-      return message if email =~ /[\s\t\r\n\f\v]/ # spaces are not allowed
+      return message if email =~ /\s/ # spaces are not allowed
       email = email.strip if email
 
       return message unless (email.blank? || email.ascii_only?)

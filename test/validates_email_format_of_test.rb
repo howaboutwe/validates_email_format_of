@@ -124,11 +124,14 @@ class ValidatesEmailFormatOfTest < TEST_CASE
   # from http://www.rfc-editor.org/errata_search.php?rfc=3696
   def test_should_allow_quoted_characters
     ['"Abc\@def"@example.com',
-     '"Fred\ Bloggs"@example.com',
      '"Joe.\\Blow"@example.com',
      ].each do |email|
       assert_valid(email)
     end
+  end
+
+  def test_should_not_allow_spaces
+    assert_invalid(" foo@example.com ")
   end
 
   def test_should_required_balanced_quoted_characters
@@ -224,8 +227,8 @@ class ValidatesEmailFormatOfTest < TEST_CASE
   end
 
   def test_frozen_string
-    assert_valid("  #{@valid_email}  ".freeze)
-    assert_invalid("  #{@invalid_email}  ".freeze)
+    assert_valid("#{@valid_email}".freeze)
+    assert_invalid("#{@invalid_email}".freeze)
   end
 
   def test_restrict_special_chars

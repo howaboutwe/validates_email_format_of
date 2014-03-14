@@ -3,7 +3,7 @@ module ValidatesEmailFormatOf
   require 'resolv'
   require 'tld_whitelist'
 
-  @@restrict_special_chars = false
+  @@restrict_special_chars = true
   @@restricted_special_chars = /[&!`#\?]/
 
   VERSION = '1.5.3'
@@ -35,14 +35,14 @@ module ValidatesEmailFormatOf
   # * <tt>with</tt> The regex to use for validating the format of the email address (deprecated)
   # * <tt>local_length</tt> Maximum number of characters allowed in the local part (default is 64)
   # * <tt>domain_length</tt> Maximum number of characters allowed in the domain part (default is 255)
-  # * <tt>restrict_special_chars</tt> Does not allow & and ! in local part (default is false)
+  # * <tt>restrict_special_chars</tt> Does not allow & and ! in local part (default is true)
   def self.validate_email_format(email, options={})
       default_options = { :message => I18n.t(:invalid_email_address, :scope => [MessageScope, :errors, :messages], :default => 'does not appear to be valid'),
                           :check_mx => false,
                           :mx_message => I18n.t(:email_address_not_routable, :scope => [MessageScope, :errors, :messages], :default => 'is not routable'),
                           :domain_length => 255,
                           :local_length => 64,
-                          :restrict_special_chars => false
+                          :restrict_special_chars => true
                           }
       opts = options.merge(default_options) {|key, old, new| old}  # merge the default options into the specified options, retaining all specified options
 

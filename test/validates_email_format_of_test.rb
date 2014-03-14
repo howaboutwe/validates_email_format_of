@@ -47,7 +47,6 @@ class ValidatesEmailFormatOfTest < TEST_CASE
   # from RFC 3696, page 6
      'customer/department=shipping@example.com',
      '$A12345@example.com',
-     '!def!xyz%abc@example.com',
      '_somename@example.com',
   # apostrophes
      "test'test@example.com",
@@ -55,12 +54,6 @@ class ValidatesEmailFormatOfTest < TEST_CASE
      'test@xn--bcher-kva.ch',
      'test@example.xn--0zwm56d',
      'test@192.192.192.1',
-  # special characters in local parts
-     'test&test@example.com',
-     'test!test@example.com',
-     'test`test@example.com',
-     'test#test@example.com',
-     'test?test@example.com'
      ].each do |email|
       assert_valid(email)
     end
@@ -115,7 +108,14 @@ class ValidatesEmailFormatOfTest < TEST_CASE
      'foo@',
      'foo',
      'erennl@gnÃ³mica.com',
-     'Iñtërnâtiônàlizætiøn@hasnt.happened.to.email'
+     'Iñtërnâtiônàlizætiøn@hasnt.happened.to.email',
+  # special characters in local parts
+     'test&test@example.com',
+     'test!test@example.com',
+     'test`test@example.com',
+     'test#test@example.com',
+     'test?test@example.com',
+     '!def!xyz%abc@example.com',
      ].each do |email|
       assert_invalid(email)
     end
